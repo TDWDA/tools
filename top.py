@@ -49,34 +49,6 @@ def DrawTop():
   draw_type = '-l'
   top_file = 'top.log'
   
- 
-  
-  # if len(sys.argv) == 2:
-  #   if sys.argv[1] == '-l' or sys.argv[1] == '-d':
-  #     usage()
-  #   else:
-  #     proc = sys.argv[1]
-  # elif len(sys.argv) == 3:
-  #   if sys.argv[1] == '-l' or sys.argv[1] == '-d':
-  #     draw_type = sys.argv[1]
-  #   else:
-  #     usage()
-  #   proc = sys.argv[2]
-  # elif len(sys.argv) == 4:
-  #   if sys.argv[2] == '-f':
-  #     top_file = sys.argv[3]
-      
-  #     print(top_file)
-      
-  #   else:
-  #     usage()
-  # elif len(sys.argv) == 5:
-  #   if sys.argv[3] == '-f':
-  #     top_file = sys.argv[4]
-  #   else:
-  #     usage()
-  # else:
-  #   usage()
   if len(sys.argv)==3:
     proc = sys.argv[1]
     top_file = sys.argv[2]
