@@ -53,10 +53,6 @@ def DrawTop():
     proc = sys.argv[1]
     top_file = sys.argv[2]
 
-  # print("argv[0]:%s \nargv[1]:%s \nargv[2]:%s \nargv[3]:%s"%(sys.argv[0],sys.argv[1],sys.argv[2],sys.argv[3]))
-  # print(proc,draw_type,top_file)
-
-
   with open(top_file, 'rb') as fp:
     #proc_name = matchProcName(fp, proc)
     lines = fp.readlines()
@@ -68,18 +64,17 @@ def DrawTop():
     memtotal= []
     time = []
     for line in lines:
-      # print (line)
       #items = line.decode('utf-8').strip(' \n').replace('   ', ' ').replace('  ', ' ').replace('  ', ' ').split(' ')
-      items = line.decode('utf-8').strip(' \n').replace('     ',' ').replace('    ',' ').replace('   ',' ').replace('  ',' ').split(' ')
+      items = line.decode('utf-8').strip(' \n').strip('\r').replace('     ',' ').replace('    ',' ').replace('   ',' ').replace('  ',' ').split(' ')
       # print(len(items), items)
 
-      if len(items) == 12:
+      if len(items) == 12 and items[0] != 'KiB':
         if items[0] != 'top' and items[11] != 'COMMAND':
           try:
             ctotal += float(items[8])
-            mtotal+=float(items[9])
-          except ValueError:
-            pass
+            mtotal += float(items[9])
+          except Exception as e:
+              print(repr(e))
           if proc in items[11]:
           #if re.fullmatch(proc, items[11]):
             if proc_name == '':
@@ -90,13 +85,13 @@ def DrawTop():
               exit()
             cpu.append(float(items[8]))
             mem.append(float(items[9]))
-            # time.append((items[10]))
         elif items[11] == 'COMMAND':
           if ctotal != 0:
+            # print(ctotal)
             cpu_total.append(ctotal)
             memtotal.append(mtotal)
             ctotal = 0
-            mtotal =0
+            mtotal = 0
       elif items[0] == 'top':
           time.append(items[2])
 
@@ -107,7 +102,7 @@ def DrawTop():
     y_memtotal=np.array(memtotal)
     num_y=(len(y_cputotal))
     num_x=(len(x))
-    # print(time)
+    print(num_x,num_y)
     if(num_x!=num_y):
       if(num_x>num_y):
         # x = x[:, :-1]
@@ -116,10 +111,10 @@ def DrawTop():
         y_mem=np.delete(y_mem,-1,axis=0)  
 
     fig = plt.figure('CPU')
-    ax1_1 = fig.add_subplot(8,2,1)
-    ax1_2 = fig.add_subplot(8,2,2)
-    ax2_1 = fig.add_subplot(8,2,3)
-    ax2_2 = fig.add_subplot(8,2,4)
+    ax1_1 = fig.add_subplot(4,2,1)
+    ax1_2 = fig.add_subplot(4,2,2)
+    ax2_1 = fig.add_subplot(4,2,3)
+    ax2_2 = fig.add_subplot(4,2,4)
     # ax3_1 = fig.add_subplot(8,2,5)
     # ax3_2 = fig.add_subplot(8,2,6)
     # ax4_1 = fig.add_subplot(8,2,7)
@@ -165,8 +160,8 @@ def DrawTop():
       # ax1.scatter(range(len(cpu)), cpu, marker = 'o', color = 'green', s = 40, label = proc + ' cpu(%)')
       # ax2.scatter(range(len(cpu_total)), cpu_total, marker = 'o', color = 'blue', s = 40, label = 'total cpu(%)')
     
-    # ax1.set_xticks(range(0,len(x),80)) 
-    # ax2.set_xticks(range(0,len(x),80)) 
+    ax1_1.set_xticks(range(0,len(x),50)) 
+    ax1_2.set_xticks(range(0,len(x),50)) 
     # ax3.set_xticks(range(0,len(x),80)) 
     # ax4.set_xticks(range(0,len(x),80)) 
     # ax1.set_xticklabels(x,rotation=15)
